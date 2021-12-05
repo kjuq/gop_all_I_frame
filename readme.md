@@ -1,6 +1,6 @@
 # Caution
 
-The way describeed below isn't recommended.
+The way described below isn't recommended.
 Just type `./main.sh`
 
 # create an uncompressed video
