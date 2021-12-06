@@ -2,13 +2,13 @@
 
 set -e
 
-TYPE="--rotate"
+TYPE="--scramble"
 
 ORIG_VID=landscape.mov
 
 ENCRYPTOR=~/codes/seminar/jpeg_encryption
 
-I_FRAME=1
+I_FRAME=120
 
 # ensure that the current directory is where the script is
 DIR=`dirname $0` && cd $DIR
@@ -69,10 +69,16 @@ done
 cd $DIR
 echo "!-- Frames were successfully decrypted. --!"
 
+read -p "frames decrypted"
+
 # concatenate decrypted frames
 dec_comp_vid=dec_cmp.avi
 ffmpeg -r 60 -i $TMP/frame%03d.png -r 60 -vcodec rawvideo -pix_fmt yuv420p $TMP/$dec_comp_vid
 echo "!-- Frames were successfully concatenated into an uncompressed and decrypted video. --!"
+
+# create normal compressed video
+cmp_vid=cmp.mp4
+ffmpeg -i $raw_vid -vcodec libx264 -g $I_FRAME -keyint_min $I_FRAME -preset veryfast -crf 35 $cmp_vid
 
 # remove temporary files
 rm -rf $TMP/*.png
